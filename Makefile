@@ -5,7 +5,7 @@ client_node_modules: ./client/package.json ./client/yarn.lock
 
 @PHONY: kill
 kill: .
-	lsof -ti:3000 | xargs kill && lsof -ti:5000 | xargs kill
+	lsof -ti:3000 | xargs kill && lsof -ti:5000 | xargs kill && ps gx | grep nodemon | xargs kill  &
 
 @PHONY: server
 server: server_node_modules
@@ -13,7 +13,7 @@ server: server_node_modules
 
 @PHONY: client
 client: client_node_modules 
-		cd client && yarn start &
+		cd client && yarn start &	
 
 
 @PHONY: start
