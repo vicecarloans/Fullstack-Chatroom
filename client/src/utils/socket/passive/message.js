@@ -1,5 +1,5 @@
 import { eventChannel } from 'redux-saga';
-import { customSocketEvents } from '.';
+import { customSocketEvents } from 'constants/events';
 
 // Create a buffer for incoming events
 
@@ -15,13 +15,25 @@ export const createSocketNotice = socket =>
 		};
 	});
 
-export const createSocketMessage = socket =>
+export const createSocketReceiveMessage = socket =>
 	eventChannel(emit => {
-		socket.on('message', ({ message }) => {
+		socket.on(customSocketEvents.RECEIVE_MESSAGE, ({ message }) => {
 			emit(message);
 		});
 		return () => {
-			socket.off('message', ({ message }) => {
+			socket.off(customSocketEvents.RECEIVE_MESSAGE, ({ message }) => {
+				emit(message);
+			});
+		};
+	});
+
+export const createSocketInMessage = socket =>
+	eventChannel(emit => {
+		socket.on(customSocketEvents.MESSAGE, ({ message }) => {
+			emit(message);
+		});
+		return () => {
+			socket.off(customSocketEvents.MESSAGE, ({ message }) => {
 				emit(message);
 			});
 		};

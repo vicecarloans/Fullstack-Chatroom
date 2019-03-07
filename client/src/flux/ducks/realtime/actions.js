@@ -66,3 +66,21 @@ export const addErrorMessage = message => ({
 		message,
 	},
 });
+
+export const ADD_GROUP_CHAT_MESSAGE = 'ADD_GROUP_CHAT_MESSAGE';
+
+export const addMessageToGroupChat = message => ({
+	type: ADD_GROUP_CHAT_MESSAGE,
+	payload: {
+		message,
+	},
+});
+
+export const LIST_ALL_ROOMS = 'LIST_ALL_ROOMS';
+
+export const listRooms = rooms => ({
+	type: LIST_ALL_ROOMS,
+	payload: {
+		rooms,
+	},
+});

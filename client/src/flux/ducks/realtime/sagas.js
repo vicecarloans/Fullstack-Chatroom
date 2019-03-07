@@ -8,7 +8,7 @@ import {
 	race,
 	cancelled,
 } from 'redux-saga/effects';
-import { eventChannel, delay } from 'redux-saga';
+import { delay } from 'redux-saga';
 import {
 	START_CHANNEL,
 	turnServerOff,
@@ -19,14 +19,18 @@ import {
 	addAnnouncement,
 	addInMessage,
 	addErrorMessage,
+	addMessageToGroupChat,
+	listRooms,
 } from './actions';
 import {
 	connect,
 	disconnect,
 	reconnect,
 	createSocketNotice,
-	createSocketMessage,
+	createSocketInMessage,
 	createSocketError,
+	createSocketReceiveMessage,
+	createSocketRooms,
 } from 'utils/socket';
 
 const socket = io(SERVER_HOST);
@@ -56,14 +60,32 @@ function* listenServerSaga() {
 			yield put(turnServerOff());
 		}
 		const noticeSocketChannel = yield call(createSocketNotice, socket);
-		const messageSocketChannel = yield call(createSocketMessage, socket);
+		const inMessageSocketChannel = yield call(
+			createSocketInMessage,
+			socket
+		);
+		const receiveMessageSocketChannel = yield call(
+			createSocketReceiveMessage,
+			socket
+		);
+
+		const roomSocketChannel = yield call(createSocketRooms, socket);
+
 		const errorSocketChannel = yield call(createSocketError, socket);
 		yield fork(listenDisconnectSaga);
 		yield fork(listenConnectSaga);
 		yield put(turnServerOn());
+
+		//Listen to all passive events (events emit from server)
 		yield takeLatest(noticeSocketChannel, handleAnnoucementSaga);
-		yield takeLatest(messageSocketChannel, handleInMessSaga);
+		yield takeLatest(inMessageSocketChannel, handleInMessSaga);
 		yield takeLatest(errorSocketChannel, handleErrorSaga);
+		yield takeLatest(
+			receiveMessageSocketChannel,
+			handleGroupChatMessageSaga
+		);
+
+		yield takeLatest(roomSocketChannel, handleListRoomSaga);
 	} catch (err) {
 		console.warn(err);
 	} finally {
@@ -84,6 +106,14 @@ function* handleInMessSaga(data) {
 
 function* handleErrorSaga(data) {
 	yield put(addErrorMessage(data));
+}
+
+function* handleGroupChatMessageSaga(data) {
+	yield put(addMessageToGroupChat(data));
+}
+
+function* handleListRoomSaga(data) {
+	yield put(listRooms(data));
 }
 
 function* racingSaga() {

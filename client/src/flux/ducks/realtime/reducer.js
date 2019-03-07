@@ -7,6 +7,8 @@ import {
 	ADD_ANNOUNCEMENT,
 	ADD_IN_MESSAGE,
 	DELETE_IN_MESSAGE,
+	ADD_GROUP_CHAT_MESSAGE,
+	LIST_ALL_ROOMS,
 } from './actions';
 import { ANNOUCEMENT, NORMAL, ERROR } from 'constants/messageTypes';
 
@@ -58,6 +60,28 @@ const messages = (state = messagesInitState, { type, payload }) => {
 				...state,
 				inMess: { type: '', message: '' },
 			};
+		case ADD_GROUP_CHAT_MESSAGE:
+			return {
+				...state,
+				logs: [
+					...state.logs,
+					{ type: NORMAL, message: payload.message },
+				],
+			};
+		default:
+			return state;
+	}
+};
+
+const roomInitialState = {
+	list: {},
+};
+
+const rooms = (state = roomInitialState, { type, payload }) => {
+	switch (type) {
+		case LIST_ALL_ROOMS:
+			return { ...state, list: payload.rooms };
+
 		default:
 			return state;
 	}
@@ -66,4 +90,5 @@ const messages = (state = messagesInitState, { type, payload }) => {
 export default combineReducers({
 	status,
 	messages,
+	rooms,
 });
