@@ -10,7 +10,7 @@ export const customSocketEvents = {
 	// This event is used to send message to group chat
 	ADD_MESSAGE: 'add_message', //done
 	// This event is received message from chat
-	RECEIVE_MESSAGE: 'chat_message', //done
+	RECEIVE_MESSAGE: 'receive_message', //done
 	// This event is used to change username
 	CHANGE_USERNAME: 'change_username', //done
 
