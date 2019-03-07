@@ -1,7 +1,7 @@
 const multer = require('multer');
 const { image } = require('./regex');
 const httpStatus = require('http-status');
-const APIError = require('../src/helpers/APIError');
+const APIError = require('../src/exceptions/APIError');
 
 const imageFilter = function(req, file, cb) {
 	// accept image only

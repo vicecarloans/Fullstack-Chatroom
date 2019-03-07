@@ -1,5 +1,4 @@
 const socketConstants = require('../constants/socket');
-const socketConstants = require('../constants/events');
 const userUtils = require('../helpers/users');
 const userExceptions = require('../exceptions/socket');
 const mongoose = require('mongoose');
@@ -42,7 +41,7 @@ function chatListener({ io, socket }) {
 			// Broadcast to the receivers
 			io.to(room).emit(socketConstants.RECEIVE_MESSAGE, { message });
 		} catch (err) {
-			userExceptions.handleSocketException({ socket, err });
+			await userExceptions.handleSocketException({ socket, err });
 		}
 	});
 }

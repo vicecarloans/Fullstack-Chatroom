@@ -21,6 +21,12 @@ import {
 	addErrorMessage,
 	addMessageToGroupChat,
 	listRooms,
+	LIST_ALL_ROOMS,
+	REQUEST_JOIN_ROOM,
+	REQUEST_LEAVE_ROOM,
+	REQUEST_ADD_MESSAGE_TO_GROUP,
+	REQUEST_CHANGE_USERNAME,
+	REQUEST_SWITCH_ROOM,
 } from './actions';
 import {
 	connect,
@@ -31,6 +37,12 @@ import {
 	createSocketError,
 	createSocketReceiveMessage,
 	createSocketRooms,
+	addMessageSocket,
+	changeUserNameSocket,
+	joinRoomSocket,
+	leaveRoomSocket,
+	switchRoomSocket,
+	subscribeListRoomSocket,
 } from 'utils/socket';
 
 const socket = io(SERVER_HOST);
@@ -42,7 +54,7 @@ function* listenDisconnectSaga() {
 	}
 }
 
-function* listenConnectSaga() {
+function* listenReconnectSaga() {
 	while (true) {
 		yield call(reconnect);
 		yield put(turnServerOn());
@@ -73,7 +85,7 @@ function* listenServerSaga() {
 
 		const errorSocketChannel = yield call(createSocketError, socket);
 		yield fork(listenDisconnectSaga);
-		yield fork(listenConnectSaga);
+		yield fork(listenReconnectSaga);
 		yield put(turnServerOn());
 
 		//Listen to all passive events (events emit from server)
@@ -86,6 +98,21 @@ function* listenServerSaga() {
 		);
 
 		yield takeLatest(roomSocketChannel, handleListRoomSaga);
+
+		//Listen to active events (events emit to server)
+		yield takeLatest(REQUEST_JOIN_ROOM, requestJoinRoomSaga, socket);
+		yield takeLatest(REQUEST_LEAVE_ROOM, requestLeaveRoomSaga, socket);
+		yield takeLatest(REQUEST_SWITCH_ROOM, requestSwitchRoomSaga, socket);
+		yield takeLatest(
+			REQUEST_ADD_MESSAGE_TO_GROUP,
+			requestAddMessageToGroupSaga,
+			socket
+		);
+		yield takeLatest(
+			REQUEST_CHANGE_USERNAME,
+			requestChangeUsernameSaga,
+			socket
+		);
 	} catch (err) {
 		console.warn(err);
 	} finally {
@@ -114,6 +141,24 @@ function* handleGroupChatMessageSaga(data) {
 
 function* handleListRoomSaga(data) {
 	yield put(listRooms(data));
+}
+
+function* requestJoinRoomSaga({ payload: { room }, socket }) {
+	yield call(joinRoomSocket, { socket, room });
+}
+
+function* requestLeaveRoomSaga({ socket }) {
+	yield call(leaveRoomSocket, { socket });
+}
+
+function* requestSwitchRoomSaga({ room, socket }) {
+	yield call(switchRoomSocket, { socket, room });
+}
+function* requestAddMessageToGroupSaga({ socket, message }) {
+	yield call(addMessageSocket, { socket, message });
+}
+function* requestChangeUsernameSaga({ socket, username }) {
+	yield call(changeUserNameSocket, { socket, username });
 }
 
 function* racingSaga() {

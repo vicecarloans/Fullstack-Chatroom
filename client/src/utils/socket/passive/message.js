@@ -30,11 +30,11 @@ export const createSocketReceiveMessage = socket =>
 export const createSocketInMessage = socket =>
 	eventChannel(emit => {
 		socket.on(customSocketEvents.MESSAGE, ({ message }) => {
-			emit(message);
+			emit({ message, username: socket.username, room: socket.room });
 		});
 		return () => {
 			socket.off(customSocketEvents.MESSAGE, ({ message }) => {
-				emit(message);
+				emit({ message, username: socket.username, room: socket.room });
 			});
 		};
 	});

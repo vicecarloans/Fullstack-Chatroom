@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 require('./src/events/events.model');
 require('./src/history/history.model');
-require('./src/rooms/rooms.model');
 const util = require('util');
 
 // config should be imported before importing any other file

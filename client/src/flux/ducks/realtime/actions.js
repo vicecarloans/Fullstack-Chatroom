@@ -45,10 +45,12 @@ export const addAnnouncement = message => ({
 
 export const ADD_IN_MESSAGE = 'ADD_IN_MESSAGE';
 
-export const addInMessage = message => ({
+export const addInMessage = ({ message, username, room }) => ({
 	type: ADD_IN_MESSAGE,
 	payload: {
 		message,
+		username,
+		room,
 	},
 });
 
@@ -76,11 +78,55 @@ export const addMessageToGroupChat = message => ({
 	},
 });
 
+//Active Events
+
 export const LIST_ALL_ROOMS = 'LIST_ALL_ROOMS';
 
 export const listRooms = rooms => ({
 	type: LIST_ALL_ROOMS,
 	payload: {
 		rooms,
+	},
+});
+
+export const REQUEST_JOIN_ROOM = 'REQUEST_JOIN_ROOM';
+
+export const requestJoinRoom = room => ({
+	type: REQUEST_JOIN_ROOM,
+	payload: {
+		room,
+	},
+});
+
+export const REQUEST_LEAVE_ROOM = 'REQUEST_LEAVE_ROOM';
+
+export const requestLeaveRoom = () => ({
+	type: REQUEST_LEAVE_ROOM,
+});
+
+export const REQUEST_SWITCH_ROOM = 'REQUEST_SWITCH_ROOM';
+
+export const requestSwitchRoom = room => ({
+	type: REQUEST_SWITCH_ROOM,
+	payload: {
+		room,
+	},
+});
+
+export const REQUEST_ADD_MESSAGE_TO_GROUP = 'ADD_MESSAGE_TO_GROUP';
+
+export const requestAddMessageToGroup = message => ({
+	type: REQUEST_ADD_MESSAGE_TO_GROUP,
+	payload: {
+		message,
+	},
+});
+
+export const REQUEST_CHANGE_USERNAME = 'CHANGE_USERNAME';
+
+export const changeUsername = username => ({
+	type: REQUEST_CHANGE_USERNAME,
+	payload: {
+		username,
 	},
 });

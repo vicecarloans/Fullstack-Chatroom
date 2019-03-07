@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MessageModel = mongoose.model('history');
+const MessageModel = mongoose.model('message-history');
 
 /*
  * Get a list of all message history

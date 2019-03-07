@@ -13,11 +13,9 @@ module.exports = {
 	// This event is used to send message to group chat
 	ADD_MESSAGE: 'add_message',
 	// This event is received message from chat
-	RECEIVE_MESSAGE: 'chat_message',
+	RECEIVE_MESSAGE: 'receive_message',
 	// This event is used to change username
 	CHANGE_USERNAME: 'change_username',
-	// This event will be listened list all available rooms
-	LIST_ROOMS: 'list_rooms',
 	// This event will be emit with a list of the rooms
 	ROOMS: 'rooms',
 	// This event is to switch room when user already in the room

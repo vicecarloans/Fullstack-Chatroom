@@ -9,6 +9,9 @@ import {
 	DELETE_IN_MESSAGE,
 	ADD_GROUP_CHAT_MESSAGE,
 	LIST_ALL_ROOMS,
+	REQUEST_SWITCH_ROOM,
+	REQUEST_LEAVE_ROOM,
+	ADD_ERROR_MESSAGE,
 } from './actions';
 import { ANNOUCEMENT, NORMAL, ERROR } from 'constants/messageTypes';
 
@@ -38,6 +41,8 @@ const messagesInitState = {
 		type: '',
 		message: '',
 	},
+	username: '',
+	room: '',
 };
 
 const messages = (state = messagesInitState, { type, payload }) => {
@@ -53,12 +58,35 @@ const messages = (state = messagesInitState, { type, payload }) => {
 		case ADD_IN_MESSAGE:
 			return {
 				...state,
-				inMess: { type: NORMAL, message: payload.message },
+				inMess: {
+					type: NORMAL,
+					message: payload.message,
+				},
+				username: payload.username,
+				room: payload.room,
+			};
+		case ADD_ERROR_MESSAGE:
+			return {
+				...state,
+				inMess: {
+					type: ERROR,
+					message: payload.message,
+				},
 			};
 		case DELETE_IN_MESSAGE:
 			return {
 				...state,
 				inMess: { type: '', message: '' },
+			};
+		case REQUEST_SWITCH_ROOM:
+			return {
+				...state,
+				logs: [],
+			};
+		case REQUEST_LEAVE_ROOM:
+			return {
+				...state,
+				logs: [],
 			};
 		case ADD_GROUP_CHAT_MESSAGE:
 			return {

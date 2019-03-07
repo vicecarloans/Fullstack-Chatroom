@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
-const socketConstants = require('../constants/socket.constants');
+const socketConstants = require('../constants/socket');
 const socketExceptions = require('../exceptions/socket');
 const userUtils = require('../helpers/users');
-
-const RoomModel = mongoose.model('rooms');
 
 const EventsModel = mongoose.model('events');
 
@@ -13,7 +11,7 @@ async function connection(socket) {
 		await EventsModel.save({ kind: socketConstants.CONNECT, socket });
 		console.log(`${event} was saved`);
 	} catch (err) {
-		socketExceptions.handleSocketException({ socket, err });
+		await socketExceptions.handleSocketException({ socket, err });
 	}
 }
 
@@ -25,13 +23,11 @@ function disconnect({ io, socket }) {
 				socket,
 				room: socket.room,
 			});
-			socket.broadcast
-				.to(socket.room)
-				.emit(socketConstants.NOTICE, {
-					message: `${socket.username} is disconnected`,
-				});
+			socket.broadcast.to(socket.room).emit(socketConstants.NOTICE, {
+				message: `${socket.username} is disconnected`,
+			});
 		} catch (err) {
-			socketExceptions.handleSocketException({ socket, err });
+			await socketExceptions.handleSocketException({ socket, err });
 		}
 	});
 }
@@ -53,7 +49,7 @@ function changeUsername({ io, socket }) {
 				message: `Your user name has been changed to ${username}`,
 			});
 		} catch (err) {
-			socketExceptions.handleSocketException({ socket, err });
+			await socketExceptions.handleSocketException({ socket, err });
 		}
 	});
 }
@@ -79,14 +75,15 @@ function joinRoom({ io, socket }) {
 			// This will be an in mail for user
 			socket.send({ message: 'You have joined the room' });
 
+			socket.emit(socketConstants.ROOMS, {
+				rooms: io.sockets.adapter.rooms,
+			});
 			// Broadcast to everyone in the room a user has joined
-			socket.broadcast
-				.to(room)
-				.emit(socketConstants.NOTICE, {
-					message: `${username} has join the room`,
-				});
+			socket.broadcast.to(room).emit(socketConstants.NOTICE, {
+				message: `${username} has join the room`,
+			});
 		} catch (err) {
-			socketExceptions.handleSocketException({ socket, err });
+			await socketExceptions.handleSocketException({ socket, err });
 		}
 	});
 }
@@ -102,11 +99,13 @@ function leaveRoom({ io, socket }) {
 			socket.leave(room);
 			socket.room = null;
 
-			socket.broadcast
-				.to(room)
-				.emit(socketConstants.NOTICE, {
-					message: `${username} has left the room`,
-				});
+			socket.broadcast.to(room).emit(socketConstants.NOTICE, {
+				message: `${username} has left the room`,
+			});
+
+			socket.emit(socketConstants.ROOMS, {
+				rooms: io.sockets.adapter.rooms,
+			});
 			// Save event to event model
 			await EventsModel.save({
 				kind: socketConstants.LEAVE,
@@ -114,23 +113,7 @@ function leaveRoom({ io, socket }) {
 				room,
 			});
 		} catch (err) {
-			socketExceptions.handleSocketException({ socket, err });
-		}
-	});
-}
-
-function listRoom({ io, socket }) {
-	socket.on(socketConstants.LIST_ROOMS, async () => {
-		try {
-			socket.emit(socketConstants.ROOMS, {
-				rooms: io.sockets.adapter.rooms,
-			});
-			await EventsModel.save({
-				kind: socketConstants.LIST_ROOMS,
-				socket,
-			});
-		} catch (err) {
-			socketExceptions.handleSocketException({ socket, err });
+			await socketExceptions.handleSocketException({ socket, err });
 		}
 	});
 }
@@ -145,11 +128,9 @@ function switchRoom({ io, socket }) {
 			const { username } = socket;
 			//Leave old room
 			socket.leave(oldRoom);
-			socket.broadcast
-				.to(oldRoom)
-				.emit(socketConstants.NOTICE, {
-					message: `${username} has left the room`,
-				});
+			socket.broadcast.to(oldRoom).emit(socketConstants.NOTICE, {
+				message: `${username} has left the room`,
+			});
 
 			await EventsModel.save({
 				kind: socketConstants.LEAVE,
@@ -161,18 +142,16 @@ function switchRoom({ io, socket }) {
 			socket.join(newRoom);
 			socket.room = newRoom;
 			socket.send({ message: `You have joined ${newRoom}` });
-			socket.broadcast
-				.to(newRoom)
-				.emit(socketConstants.NOTICE, {
-					message: `${username} has join the room`,
-				});
+			socket.broadcast.to(newRoom).emit(socketConstants.NOTICE, {
+				message: `${username} has join the room`,
+			});
 			await EventsModel.save({
 				kind: socketConstants.JOIN,
 				socket,
 				newRoom,
 			});
 		} catch (err) {
-			socketExceptions.handleSocketException({ socket, err });
+			await socketExceptions.handleSocketException({ socket, err });
 		}
 	});
 }
@@ -183,5 +162,5 @@ module.exports = async (io, socket) => {
 	joinRoom({ io, socket });
 	changeUsername({ io, socket });
 	leaveRoom({ io, socket });
-	listRoom({ io, socket });
+	switchRoom({ io, socket });
 };

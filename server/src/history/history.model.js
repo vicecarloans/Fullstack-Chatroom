@@ -25,7 +25,7 @@ const MessageHistorySchema = new Schema({
 	},
 });
 
-HistorySchema.statics = {
+MessageHistorySchema.statics = {
 	/*
 	 * Get all messages
 	 */

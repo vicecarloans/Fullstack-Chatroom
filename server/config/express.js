@@ -12,7 +12,7 @@ const helmet = require('helmet');
 const winstonInstance = require('./winston');
 const routes = require('../route');
 const config = require('./config');
-const APIError = require('../src/helpers/APIError');
+const APIError = require('../src/exceptions/APIError');
 
 const app = express();
 
