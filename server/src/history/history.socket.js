@@ -37,7 +37,10 @@ function chatListener({ io, socket }) {
 				room,
 			});
 			// Broadcast to the receivers
-			io.to(room).emit(socketConstants.RECEIVE_MESSAGE, { message });
+			io.to(room).emit(socketConstants.RECEIVE_MESSAGE, {
+				message,
+				author: socket.username,
+			});
 		} catch (err) {
 			await userExceptions.handleSocketException({ socket, err });
 		}

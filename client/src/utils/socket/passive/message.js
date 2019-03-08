@@ -6,24 +6,27 @@ import { customSocketEvents } from 'constants/events';
 export const createSocketNotice = socket =>
 	eventChannel(emit => {
 		socket.on(customSocketEvents.NOTICE, ({ message }) => {
-			emit(message);
+			emit({ message, author: 'BOT' });
 		});
 		return () => {
 			socket.off(customSocketEvents.NOTICE, ({ message }) => {
-				emit(message);
+				emit({ message, author: 'BOT' });
 			});
 		};
 	});
 
 export const createSocketReceiveMessage = socket =>
 	eventChannel(emit => {
-		socket.on(customSocketEvents.RECEIVE_MESSAGE, ({ message }) => {
-			emit(message);
+		socket.on(customSocketEvents.RECEIVE_MESSAGE, ({ message, author }) => {
+			emit({ message, author });
 		});
 		return () => {
-			socket.off(customSocketEvents.RECEIVE_MESSAGE, ({ message }) => {
-				emit(message);
-			});
+			socket.off(
+				customSocketEvents.RECEIVE_MESSAGE,
+				({ message, author }) => {
+					emit({ message, author });
+				}
+			);
 		};
 	});
 

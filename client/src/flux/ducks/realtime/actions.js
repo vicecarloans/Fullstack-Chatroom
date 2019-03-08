@@ -36,10 +36,11 @@ export const turnServerOff = () => ({
 
 export const ADD_ANNOUNCEMENT = 'ADD_ANNOUNCEMENT';
 
-export const addAnnouncement = message => ({
+export const addAnnouncement = ({ message, author }) => ({
 	type: ADD_ANNOUNCEMENT,
 	payload: {
 		message,
+		author,
 	},
 });
 
@@ -71,10 +72,11 @@ export const addErrorMessage = message => ({
 
 export const ADD_GROUP_CHAT_MESSAGE = 'ADD_GROUP_CHAT_MESSAGE';
 
-export const addMessageToGroupChat = message => ({
+export const addMessageToGroupChat = ({ message, author }) => ({
 	type: ADD_GROUP_CHAT_MESSAGE,
 	payload: {
 		message,
+		author,
 	},
 });
 

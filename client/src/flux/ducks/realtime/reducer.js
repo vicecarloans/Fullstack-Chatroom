@@ -52,7 +52,11 @@ const messages = (state = messagesInitState, { type, payload }) => {
 				...state,
 				logs: [
 					...state.logs,
-					{ type: ANNOUCEMENT, message: payload.message },
+					{
+						type: ANNOUCEMENT,
+						message: payload.message,
+						author: payload.author,
+					},
 				],
 			};
 		case ADD_IN_MESSAGE:
@@ -93,7 +97,11 @@ const messages = (state = messagesInitState, { type, payload }) => {
 				...state,
 				logs: [
 					...state.logs,
-					{ type: NORMAL, message: payload.message },
+					{
+						type: NORMAL,
+						message: payload.message,
+						author: payload.author,
+					},
 				],
 			};
 		default:
