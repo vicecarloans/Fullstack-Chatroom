@@ -148,7 +148,7 @@ function switchRoom({ io, socket }) {
 			socket.broadcast.to(newRoom).emit(socketConstants.NOTICE, {
 				message: `${username} has join the room`,
 			});
-			await userUtils.save({
+			await userUtils.saveEvent({
 				kind: socketConstants.JOIN,
 				socket,
 				newRoom,

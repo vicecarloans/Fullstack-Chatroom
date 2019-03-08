@@ -9,7 +9,11 @@ import {
 	SendActionButton,
 	SwitchRoomButton,
 } from './ChatContent.styles';
-import { requestAddMessageToGroup } from 'flux/ducks/realtime';
+import {
+	requestAddMessageToGroup,
+	toggleSwitchRoomModalOn,
+	requestSubscribeListRoom,
+} from 'flux/ducks/realtime';
 
 export class ChatBox extends Component {
 	state = {
@@ -22,7 +26,12 @@ export class ChatBox extends Component {
 		const { text } = this.state;
 		if (text) {
 			this.props.requestAddMessageToGroup(text);
+			this.setState({ text: '' });
 		}
+	};
+	handleSwitchRoom = () => {
+		this.props.toggleSwitchRoomModalOn();
+		this.props.requestSubscribeListRoom();
 	};
 	render() {
 		return (
@@ -30,12 +39,13 @@ export class ChatBox extends Component {
 				<ChatInputArea
 					onChange={this.handleOnTextChange}
 					placeholder="Enter your chat message..."
+					value={this.state.text}
 				/>
 				<ChatActions>
 					<SendActionButton onClick={this.handleSendMessage}>
 						Send Message
 					</SendActionButton>
-					<SwitchRoomButton onClick={() => {}}>
+					<SwitchRoomButton onClick={this.handleSwitchRoom}>
 						Switch Room
 					</SwitchRoomButton>
 				</ChatActions>
@@ -48,6 +58,8 @@ const mapStateToProps = combineSelectors({});
 
 const mapDispatchToProps = {
 	requestAddMessageToGroup,
+	toggleSwitchRoomModalOn,
+	requestSubscribeListRoom,
 };
 
 export default connect(

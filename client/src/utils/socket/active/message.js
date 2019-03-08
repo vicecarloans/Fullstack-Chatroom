@@ -1,7 +1,6 @@
 import { customSocketEvents } from 'constants/events';
 
 export const addMessageSocket = ({ socket, message }) => {
-	console.log(message);
 	socket.emit(customSocketEvents.ADD_MESSAGE, { message });
 };
 

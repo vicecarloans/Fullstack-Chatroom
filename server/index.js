@@ -31,7 +31,6 @@ if (!module.parent) {
 		try {
 			await socket(io, _socket);
 		} catch (err) {
-			console.log(err);
 			_socket.emit(socketEvents.CUSTOM_ERROR, { err });
 		}
 	});

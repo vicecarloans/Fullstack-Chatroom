@@ -25,3 +25,9 @@ a {
 	right: 0;
 	top: 50vh;
 }
+
+.room-list {
+	position: absolute;
+	z-index: 9999;
+	width: 50%;
+}

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import combineSelectors from 'utils/combineSelectors';
 import { connect } from 'react-redux';
 import {
@@ -19,29 +18,18 @@ import {
 	ProgressIndicator,
 	ProgressStep,
 	Modal,
-	Form,
-	FormGroup,
 	TextInput,
-	Select,
-	SelectItem,
 	DropdownV2,
 } from 'carbon-components-react';
-
-import uuidv4 from 'uuid/v4';
-import DropdownItem from 'carbon-components-react/lib/components/DropdownItem';
 
 export class ProgressModal extends Component {
 	state = {
 		desiredUsername: '',
 		desiredRoom: '',
 	};
-	handleCloseRegModal = () => {
-		console.log('Closing');
-	};
+	handleCloseRegModal = () => {};
 
-	handleCloseRoomModal = () => {
-		console.log('Closing');
-	};
+	handleCloseRoomModal = () => {};
 
 	handleNextStep = () => {
 		this.props.nextStep();

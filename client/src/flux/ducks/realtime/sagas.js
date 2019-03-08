@@ -144,7 +144,6 @@ function* handleAnnoucementSaga(data) {
 }
 
 function* handleInMessSaga(data) {
-	console.log(data);
 	yield put(addInMessage(data));
 }
 

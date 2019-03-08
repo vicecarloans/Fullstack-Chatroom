@@ -23,7 +23,6 @@ function chatListener({ io, socket }) {
 			const receiverUsernames = clientUsernames.filter(client => {
 				return client != username;
 			});
-			console.log(receiverUsernames);
 			// Message History
 			const MessageHistoryInstance = new MessageHistoryModel({
 				sender: username,

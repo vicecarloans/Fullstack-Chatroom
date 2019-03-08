@@ -82,3 +82,8 @@ export const subscriptionIdSelector = createSelector(
 	realTimeSelector,
 	realtime => realtime.rooms.sid
 );
+
+export const switchRoomModalSelector = createSelector(
+	realTimeSelector,
+	realtime => realtime.step.switchRoomModal
+);

@@ -5,7 +5,7 @@ export const ChatListWrapper = styled.div`
 	padding: 20px;
 	background-color: #fff;
 	border: 1px solid #000;
-
+	overflow: scroll;
 	border-bottom: none;
 `;
 
@@ -54,7 +54,7 @@ export const ChatLine = styled.div`
 	margin: 20px;
 	display: flex;
 	flex-wrap: wrap;
-
+	align-items: center;
 	width: 100%;
 `;
 
@@ -62,6 +62,7 @@ export const Username = styled.p`
 	font-weight: bold;
 	color: #000;
 	font-size: 18px;
+	margin-right: 5px;
 `;
 
 export const ChatContent = styled.p`
@@ -71,4 +72,5 @@ export const ChatContent = styled.p`
 export const AnnoucementChatLine = styled(ChatLine)`
 	justify-content: center;
 	color: #00a300;
+	align-items: center;
 `;

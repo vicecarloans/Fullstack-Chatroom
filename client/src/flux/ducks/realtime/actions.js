@@ -178,3 +178,13 @@ export const closeRoomModal = () => ({
 	type: CLOSE_ROOM_MODAL,
 	payload: {},
 });
+
+export const TOGGLE_SWITCH_ROOM_MODAL_ON = 'TOGGLE_SWITCH_ROOM_MODAL';
+export const toggleSwitchRoomModalOn = () => ({
+	type: TOGGLE_SWITCH_ROOM_MODAL_ON,
+});
+
+export const TOGGLE_SWITCH_ROOM_MODAL_OFF = 'TOGGLE_SWITCH_ROOM_MODAL_OFF';
+export const toggleSwitchRoomModalOff = () => ({
+	type: TOGGLE_SWITCH_ROOM_MODAL_OFF,
+});

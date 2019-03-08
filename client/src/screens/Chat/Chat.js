@@ -6,8 +6,14 @@ import {
 	startChannel,
 	inMessExistSelector,
 	inMessSelector,
+	deleteInMessage,
 } from 'flux/ducks/realtime';
-import { ChatBox, ChatList, ProgressModal } from 'components/Chat';
+import {
+	ChatBox,
+	ChatList,
+	ProgressModal,
+	SwitchRoomModal,
+} from 'components/Chat';
 import { ToastNotification } from 'carbon-components-react';
 import { PageWrapper } from './Chat.styles';
 import { NORMAL, ERROR } from 'constants/messageTypes';
@@ -38,6 +44,8 @@ export class Chat extends Component {
 						title="Message from BOT"
 						subtitle={message}
 						className="in-mail-noti"
+						caption=""
+						onCloseButtonClick={this.props.deleteInMessage}
 					/>
 				);
 			case ERROR:
@@ -47,6 +55,8 @@ export class Chat extends Component {
 						title="Message from BOT"
 						subtitle={message}
 						className="in-mail-noti"
+						caption=""
+						onCloseButtonClick={this.props.deleteInMessage}
 					/>
 				);
 			default:
@@ -58,7 +68,10 @@ export class Chat extends Component {
 			<PageWrapper>
 				<ChatList />
 				<ChatBox />
+
 				<ProgressModal />
+
+				<SwitchRoomModal />
 				{this.renderInMessage()}
 			</PageWrapper>
 		);
@@ -72,6 +85,7 @@ const mapStateToProps = combineSelectors({
 
 const mapDispatchToProps = {
 	startChannel,
+	deleteInMessage,
 };
 
 export default connect(

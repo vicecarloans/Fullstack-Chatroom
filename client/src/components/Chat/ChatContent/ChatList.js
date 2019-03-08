@@ -22,20 +22,40 @@ export class ChatList extends Component {
 		logs: [],
 	};
 
+	componentDidUpdate() {
+		if (this.lastLine) {
+			this.lastLine.scrollIntoView({ behavior: 'smooth' });
+		}
+	}
+
 	renderLogs = () => {
-		return this.props.logs.map(log => {
+		return this.props.logs.map((log, i) => {
 			switch (log.type) {
 				case ANNOUCEMENT:
 					return (
-						<AnnoucementChatLine key={uuidv4()}>
-							<Username>{log.author}</Username>
+						<AnnoucementChatLine
+							ref={ref => {
+								if (i === this.props.logs.length - 1) {
+									this.lastLine = ref;
+								}
+							}}
+							key={uuidv4()}
+						>
+							<Username>{log.author} : </Username>
 							<ChatContent>{log.message}</ChatContent>
 						</AnnoucementChatLine>
 					);
 				case NORMAL:
 					return (
-						<ChatLine key={uuidv4()}>
-							<Username>{log.author}</Username>
+						<ChatLine
+							ref={ref => {
+								if (i === this.props.logs.length - 1) {
+									this.lastLine = ref;
+								}
+							}}
+							key={uuidv4()}
+						>
+							<Username>{log.author} : </Username>
 							<ChatContent>{log.message}</ChatContent>
 						</ChatLine>
 					);

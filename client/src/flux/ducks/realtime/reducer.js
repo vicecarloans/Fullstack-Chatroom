@@ -16,14 +16,14 @@ import {
 	PREV_STEP,
 	CLOSE_REG_MODAL,
 	CLOSE_ROOM_MODAL,
-	DESIRED_USERNAME_CHANGE,
 	REQUEST_CHANGE_USERNAME,
 	REQUEST_ADD_MESSAGE_TO_GROUP,
 	REQUEST_JOIN_ROOM,
 	REGISTER_SID,
+	TOGGLE_SWITCH_ROOM_MODAL_ON,
+	TOGGLE_SWITCH_ROOM_MODAL_OFF,
 } from './actions';
 import { ANNOUCEMENT, NORMAL, ERROR } from 'constants/messageTypes';
-import { stat } from 'fs';
 
 const statusInitState = {
 	server: 'unknown',
@@ -139,6 +139,7 @@ const stepInitialState = {
 	step: 1,
 	openRegModal: true,
 	openRoomModal: false,
+	switchRoomModal: false,
 };
 const step = (state = stepInitialState, { type, payload }) => {
 	switch (type) {
@@ -160,6 +161,10 @@ const step = (state = stepInitialState, { type, payload }) => {
 			return { ...state, openRegModal: false };
 		case CLOSE_ROOM_MODAL:
 			return { ...state, openRoomModal: false };
+		case TOGGLE_SWITCH_ROOM_MODAL_ON:
+			return { ...state, switchRoomModal: true };
+		case TOGGLE_SWITCH_ROOM_MODAL_OFF:
+			return { ...state, switchRoomModal: false };
 		default:
 			return state;
 	}
