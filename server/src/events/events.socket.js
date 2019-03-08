@@ -43,6 +43,8 @@ function changeUsername({ io, socket }) {
 			// This is an in-mail to user from the bot
 			socket.send({
 				message: `Your user name has been changed to ${username}`,
+				username,
+				room: socket.room,
 			});
 		} catch (err) {
 			await socketExceptions.handleSocketException({ socket, err });
@@ -70,14 +72,17 @@ function joinRoom({ io, socket }) {
 			});
 
 			// This will be an in mail for user
-			socket.send({ message: 'You have joined the room' });
-
-			socket.emit(socketConstants.ROOMS, {
-				rooms: io.sockets.adapter.rooms,
+			socket.send({
+				message: 'You have joined the room',
+				username: socket.username,
+				room,
 			});
+
 			// Broadcast to everyone in the room a user has joined
 			socket.broadcast.to(room).emit(socketConstants.NOTICE, {
-				message: `${username} has join the room`,
+				message: `${socket.username} has join the room`,
+				room,
+				username: socket.username,
 			});
 		} catch (err) {
 			await socketExceptions.handleSocketException({ socket, err });
@@ -100,9 +105,6 @@ function leaveRoom({ io, socket }) {
 				message: `${username} has left the room`,
 			});
 
-			socket.emit(socketConstants.ROOMS, {
-				rooms: io.sockets.adapter.rooms,
-			});
 			// Save event to event model
 			await userUtils.saveEvent({
 				kind: socketConstants.LEAVE,
@@ -138,7 +140,11 @@ function switchRoom({ io, socket }) {
 			//Join new room
 			socket.join(newRoom);
 			socket.room = newRoom;
-			socket.send({ message: `You have joined ${newRoom}` });
+			socket.send({
+				message: `You have joined ${newRoom}`,
+				room: socket.room,
+				username: socket.username,
+			});
 			socket.broadcast.to(newRoom).emit(socketConstants.NOTICE, {
 				message: `${username} has join the room`,
 			});
@@ -160,4 +166,9 @@ module.exports = async (io, socket) => {
 	changeUsername({ io, socket });
 	leaveRoom({ io, socket });
 	switchRoom({ io, socket });
+	setInterval(() => {
+		socket.broadcast.emit(socketConstants.ROOMS, {
+			rooms: io.sockets.adapter.rooms,
+		});
+	}, 2000);
 };

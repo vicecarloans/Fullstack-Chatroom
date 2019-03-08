@@ -32,13 +32,16 @@ export const createSocketReceiveMessage = socket =>
 
 export const createSocketInMessage = socket =>
 	eventChannel(emit => {
-		socket.on(customSocketEvents.MESSAGE, ({ message }) => {
-			emit({ message, username: socket.username, room: socket.room });
+		socket.on(customSocketEvents.MESSAGE, ({ message, username, room }) => {
+			emit({ message, username, room });
 		});
 		return () => {
-			socket.off(customSocketEvents.MESSAGE, ({ message }) => {
-				emit({ message, username: socket.username, room: socket.room });
-			});
+			socket.off(
+				customSocketEvents.MESSAGE,
+				({ message, username, room }) => {
+					emit({ message, username, room });
+				}
+			);
 		};
 	});
 

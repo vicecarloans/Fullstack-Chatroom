@@ -9,6 +9,7 @@ import {
 	cancelled,
 	delay,
 	take,
+	select,
 } from 'redux-saga/effects';
 import {
 	START_CHANNEL,
@@ -27,6 +28,8 @@ import {
 	REQUEST_ADD_MESSAGE_TO_GROUP,
 	REQUEST_CHANGE_USERNAME,
 	REQUEST_SWITCH_ROOM,
+	REQUEST_SUBSCRIBE_LIST_ROOM,
+	REQUEST_UNSUBSCRIBE_LIST_ROOM,
 } from './actions';
 import {
 	connect,
@@ -42,7 +45,14 @@ import {
 	joinRoomSocket,
 	leaveRoomSocket,
 	switchRoomSocket,
+	subscribeListRoomSocket,
+	unsubscribeListRoomSocket,
 } from 'utils/socket';
+import {
+	desiredUsernameSelector,
+	desiredRoomSelector,
+	desiredMessageSelector,
+} from './selectors';
 
 const socket = io(SERVER_HOST);
 
@@ -80,9 +90,8 @@ function* listenServerSaga() {
 			socket
 		);
 
-		const roomSocketChannel = yield call(createSocketRooms, socket);
-
 		const errorSocketChannel = yield call(createSocketError, socket);
+
 		yield fork(listenDisconnectSaga);
 		yield fork(listenReconnectSaga);
 		yield put(turnServerOn());
@@ -96,8 +105,6 @@ function* listenServerSaga() {
 			handleGroupChatMessageSaga
 		);
 
-		yield takeLatest(roomSocketChannel, handleListRoomSaga);
-
 		//Listen to active events (events emit to server)
 		yield takeLatest(REQUEST_JOIN_ROOM, requestJoinRoomSaga, socket);
 		yield takeLatest(REQUEST_LEAVE_ROOM, requestLeaveRoomSaga, socket);
@@ -110,6 +117,16 @@ function* listenServerSaga() {
 		yield takeLatest(
 			REQUEST_CHANGE_USERNAME,
 			requestChangeUsernameSaga,
+			socket
+		);
+		yield takeLatest(
+			REQUEST_SUBSCRIBE_LIST_ROOM,
+			requestSubscribeListRoomSaga,
+			socket
+		);
+		yield takeLatest(
+			REQUEST_UNSUBSCRIBE_LIST_ROOM,
+			requestUnsubscribeListRoomSaga,
 			socket
 		);
 	} catch (err) {
@@ -127,6 +144,7 @@ function* handleAnnoucementSaga(data) {
 }
 
 function* handleInMessSaga(data) {
+	console.log(data);
 	yield put(addInMessage(data));
 }
 
@@ -142,22 +160,33 @@ function* handleListRoomSaga(data) {
 	yield put(listRooms(data));
 }
 
-function* requestJoinRoomSaga({ payload: { room }, socket }) {
+function* requestJoinRoomSaga(socket) {
+	const room = yield select(desiredRoomSelector);
 	yield call(joinRoomSocket, { socket, room });
 }
 
-function* requestLeaveRoomSaga({ socket }) {
+function* requestLeaveRoomSaga(socket) {
 	yield call(leaveRoomSocket, { socket });
 }
 
-function* requestSwitchRoomSaga({ room, socket }) {
+function* requestSwitchRoomSaga(socket) {
+	const room = yield select(desiredRoomSelector);
 	yield call(switchRoomSocket, { socket, room });
 }
-function* requestAddMessageToGroupSaga({ socket, message }) {
+function* requestAddMessageToGroupSaga(socket) {
+	const message = yield select(desiredMessageSelector);
 	yield call(addMessageSocket, { socket, message });
 }
-function* requestChangeUsernameSaga({ socket, username }) {
+function* requestChangeUsernameSaga(socket) {
+	const username = yield select(desiredUsernameSelector);
 	yield call(changeUserNameSocket, { socket, username });
+}
+function* requestSubscribeListRoomSaga(socket) {
+	const roomSocketChannel = yield call(createSocketRooms, socket);
+	yield takeLatest(roomSocketChannel, handleListRoomSaga);
+}
+function* requestUnsubscribeListRoomSaga(socket) {
+	yield call(unsubscribeListRoomSocket, { socket });
 }
 
 export function* realtimeSagaWatcher() {

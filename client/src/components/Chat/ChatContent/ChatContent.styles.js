@@ -69,6 +69,6 @@ export const ChatContent = styled.p`
 `;
 
 export const AnnoucementChatLine = styled(ChatLine)`
-	text-align: center;
+	justify-content: center;
 	color: #00a300;
 `;

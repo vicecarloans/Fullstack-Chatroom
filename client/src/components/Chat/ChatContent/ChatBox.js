@@ -9,17 +9,20 @@ import {
 	SendActionButton,
 	SwitchRoomButton,
 } from './ChatContent.styles';
+import { requestAddMessageToGroup } from 'flux/ducks/realtime';
 
 export class ChatBox extends Component {
-	static propTypes = {
-		prop: PropTypes,
-	};
-
 	state = {
 		text: '',
 	};
 	handleOnTextChange = e => {
 		this.setState({ text: e.target.value });
+	};
+	handleSendMessage = () => {
+		const { text } = this.state;
+		if (text) {
+			this.props.requestAddMessageToGroup(text);
+		}
 	};
 	render() {
 		return (
@@ -29,8 +32,12 @@ export class ChatBox extends Component {
 					placeholder="Enter your chat message..."
 				/>
 				<ChatActions>
-					<SendActionButton>Send Message</SendActionButton>
-					<SwitchRoomButton>Switch Room</SwitchRoomButton>
+					<SendActionButton onClick={this.handleSendMessage}>
+						Send Message
+					</SendActionButton>
+					<SwitchRoomButton onClick={() => {}}>
+						Switch Room
+					</SwitchRoomButton>
 				</ChatActions>
 			</ChatBoxWrapper>
 		);
@@ -39,7 +46,9 @@ export class ChatBox extends Component {
 
 const mapStateToProps = combineSelectors({});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+	requestAddMessageToGroup,
+};
 
 export default connect(
 	mapStateToProps,

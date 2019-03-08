@@ -15,7 +15,12 @@ import {
 	NEXT_STEP,
 	PREV_STEP,
 	CLOSE_REG_MODAL,
-	CLOSE_ROOM_MODAL
+	CLOSE_ROOM_MODAL,
+	DESIRED_USERNAME_CHANGE,
+	REQUEST_CHANGE_USERNAME,
+	REQUEST_ADD_MESSAGE_TO_GROUP,
+	REQUEST_JOIN_ROOM,
+	REGISTER_SID,
 } from './actions';
 import { ANNOUCEMENT, NORMAL, ERROR } from 'constants/messageTypes';
 import { stat } from 'fs';
@@ -116,13 +121,15 @@ const messages = (state = messagesInitState, { type, payload }) => {
 
 const roomInitialState = {
 	list: {},
+	sid: '',
 };
 
 const rooms = (state = roomInitialState, { type, payload }) => {
 	switch (type) {
 		case LIST_ALL_ROOMS:
 			return { ...state, list: payload.rooms };
-
+		case REGISTER_SID:
+			return { ...state, sid: payload.sid };
 		default:
 			return state;
 	}
@@ -131,34 +138,57 @@ const rooms = (state = roomInitialState, { type, payload }) => {
 const stepInitialState = {
 	step: 1,
 	openRegModal: true,
-	openRoomModal: false
-}
+	openRoomModal: false,
+};
 const step = (state = stepInitialState, { type, payload }) => {
 	switch (type) {
 		case NEXT_STEP:
-			return {...state, 
-				step: state.step < 2 ? state.step + 1 : state.step, 
-				openRegModal: false, 
-				openRoomModal: true
+			return {
+				...state,
+				step: state.step < 2 ? state.step + 1 : state.step,
+				openRegModal: false,
+				openRoomModal: true,
 			};
 		case PREV_STEP:
-			return {...state, 
+			return {
+				...state,
 				step: state.step > 1 ? state.step - 1 : state.step,
-				openRegModal: true, 
-				openRoomModal: false
+				openRegModal: true,
+				openRoomModal: false,
 			};
 		case CLOSE_REG_MODAL:
-			return {...state, openRegModal: false}
+			return { ...state, openRegModal: false };
 		case CLOSE_ROOM_MODAL:
-			return {...state, openRoomModal: false}
+			return { ...state, openRoomModal: false };
 		default:
 			return state;
 	}
-}
+};
+
+const inputInitialState = {
+	message: '',
+	username: '',
+	room: '',
+};
+
+const desired = (state = inputInitialState, { type, payload }) => {
+	switch (type) {
+		case REQUEST_CHANGE_USERNAME:
+			return { ...state, username: payload.username };
+		case REQUEST_ADD_MESSAGE_TO_GROUP:
+			return { ...state, message: payload.message };
+		case REQUEST_JOIN_ROOM:
+		case REQUEST_SWITCH_ROOM:
+			return { ...state, room: payload.room };
+		default:
+			return state;
+	}
+};
 
 export default combineReducers({
 	status,
 	messages,
 	rooms,
-	step
+	step,
+	desired,
 });

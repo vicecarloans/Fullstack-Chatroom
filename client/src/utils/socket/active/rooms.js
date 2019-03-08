@@ -11,3 +11,7 @@ export const leaveRoomSocket = ({ socket }) => {
 export const switchRoomSocket = ({ socket, room }) => {
 	socket.emit(customSocketEvents.SWITCH_ROOM, { newRoom: room });
 };
+
+export const unsubscribeListRoomSocket = ({ socket }) => {
+	socket.off(customSocketEvents.ROOMS);
+};

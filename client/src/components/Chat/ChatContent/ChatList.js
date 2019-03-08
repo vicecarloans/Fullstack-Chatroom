@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import uuidv4 from 'uuid/v4';
 import {
 	ChatListWrapper,
 	ChatLine,
@@ -26,14 +27,14 @@ export class ChatList extends Component {
 			switch (log.type) {
 				case ANNOUCEMENT:
 					return (
-						<AnnoucementChatLine>
+						<AnnoucementChatLine key={uuidv4()}>
 							<Username>{log.author}</Username>
 							<ChatContent>{log.message}</ChatContent>
 						</AnnoucementChatLine>
 					);
 				case NORMAL:
 					return (
-						<ChatLine>
+						<ChatLine key={uuidv4()}>
 							<Username>{log.author}</Username>
 							<ChatContent>{log.message}</ChatContent>
 						</ChatLine>

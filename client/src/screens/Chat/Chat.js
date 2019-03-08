@@ -7,7 +7,7 @@ import {
 	inMessExistSelector,
 	inMessSelector,
 } from 'flux/ducks/realtime';
-import { ChatBox, ChatList } from 'components/Chat';
+import { ChatBox, ChatList, ProgressModal } from 'components/Chat';
 import { ToastNotification } from 'carbon-components-react';
 import { PageWrapper } from './Chat.styles';
 import { NORMAL, ERROR } from 'constants/messageTypes';
@@ -58,6 +58,7 @@ export class Chat extends Component {
 			<PageWrapper>
 				<ChatList />
 				<ChatBox />
+				<ProgressModal />
 				{this.renderInMessage()}
 			</PageWrapper>
 		);

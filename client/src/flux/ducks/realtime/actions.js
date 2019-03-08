@@ -80,16 +80,24 @@ export const addMessageToGroupChat = ({ message, author }) => ({
 	},
 });
 
-//Active Events
-
 export const LIST_ALL_ROOMS = 'LIST_ALL_ROOMS';
 
-export const listRooms = rooms => ({
+export const listRooms = ({ rooms }) => ({
 	type: LIST_ALL_ROOMS,
 	payload: {
 		rooms,
 	},
 });
+
+export const REGISTER_SID = 'REGISTER_SID';
+export const registerSid = ({ sid }) => ({
+	type: REGISTER_SID,
+	payload: {
+		sid,
+	},
+});
+
+//Active Events
 
 export const REQUEST_JOIN_ROOM = 'REQUEST_JOIN_ROOM';
 
@@ -115,7 +123,7 @@ export const requestSwitchRoom = room => ({
 	},
 });
 
-export const REQUEST_ADD_MESSAGE_TO_GROUP = 'ADD_MESSAGE_TO_GROUP';
+export const REQUEST_ADD_MESSAGE_TO_GROUP = 'REQUEST_ADD_MESSAGE_TO_GROUP';
 
 export const requestAddMessageToGroup = message => ({
 	type: REQUEST_ADD_MESSAGE_TO_GROUP,
@@ -126,39 +134,47 @@ export const requestAddMessageToGroup = message => ({
 
 export const REQUEST_CHANGE_USERNAME = 'CHANGE_USERNAME';
 
-export const changeUsername = username => ({
+export const requestChangeUsername = username => ({
 	type: REQUEST_CHANGE_USERNAME,
 	payload: {
 		username,
 	},
 });
 
+export const REQUEST_SUBSCRIBE_LIST_ROOM = 'REQUEST_SUBSCRIBE_LIST_ROOM';
+
+export const requestSubscribeListRoom = () => ({
+	type: REQUEST_SUBSCRIBE_LIST_ROOM,
+});
+
+export const REQUEST_UNSUBSCRIBE_LIST_ROOM = 'REQUEST_UNSUBSCRIBE_LIST_ROOM';
+
+export const requestUnsubscribeListRoom = () => ({
+	type: REQUEST_UNSUBSCRIBE_LIST_ROOM,
+});
+
 export const NEXT_STEP = 'NEXT_STEP';
 
 export const nextStep = step => ({
 	type: NEXT_STEP,
-	payload: {
-		
-	}
+	payload: {},
 });
 
 export const PREV_STEP = 'PREV_STEP';
 
 export const prevStep = step => ({
 	type: PREV_STEP,
-	payload: {
-		
-	}
+	payload: {},
 });
 
 export const CLOSE_REG_MODAL = 'CLOSE_REG_MODAL';
 export const closeRegModal = () => ({
 	type: CLOSE_REG_MODAL,
-	payload: {}
+	payload: {},
 });
 
 export const CLOSE_ROOM_MODAL = 'CLOSE_ROOM_MODAL';
 export const closeRoomModal = () => ({
 	type: CLOSE_ROOM_MODAL,
-	payload: {}
-})
+	payload: {},
+});

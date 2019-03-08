@@ -10,19 +10,24 @@ function chatListener({ io, socket }) {
 		try {
 			const { message } = data;
 
-			const { room, username } = socket;
+			const { room, username, id } = socket;
 
 			//save event to room first
 			const clients = await userUtils.getAllUserByRoom({ io, room });
 			// Exclude sender in the array
-			const receivers = clients.filter(
-				client => client.username != username
-			);
 
+			const clientUsernames = clients.map(id => {
+				return io.sockets.connected[id].username;
+			});
+
+			const receiverUsernames = clientUsernames.filter(client => {
+				return client != username;
+			});
+			console.log(receiverUsernames);
 			// Message History
 			const MessageHistoryInstance = new MessageHistoryModel({
 				sender: username,
-				receivers,
+				receivers: receiverUsernames,
 				content: message,
 				room,
 			});
@@ -32,12 +37,11 @@ function chatListener({ io, socket }) {
 			// Events
 			await userUtils.saveEvent({
 				kind: socketConstants.ADD_MESSAGE,
-				uid: socket.id,
-				ppid: process.ppid,
+				socket,
 				room,
 			});
 			// Broadcast to the receivers
-			io.to(room).emit(socketConstants.RECEIVE_MESSAGE, {
+			io.in(room).emit(socketConstants.RECEIVE_MESSAGE, {
 				message,
 				author: socket.username,
 			});

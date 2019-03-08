@@ -53,7 +53,32 @@ export const roomsSelector = createSelector(
 	realtime => realtime.rooms.list
 );
 
+export const anyRoomsSelector = createSelector(
+	realTimeSelector,
+	realtime => Object.keys(realtime.rooms.list).length !== 0
+);
+
 export const stepSelector = createSelector(
-	realTimeSelector, 
+	realTimeSelector,
 	realtime => realtime.step
-)
+);
+
+export const desiredUsernameSelector = createSelector(
+	realTimeSelector,
+	realtime => realtime.desired.username
+);
+
+export const desiredRoomSelector = createSelector(
+	realTimeSelector,
+	realtime => realtime.desired.room
+);
+
+export const desiredMessageSelector = createSelector(
+	realTimeSelector,
+	realtime => realtime.desired.message
+);
+
+export const subscriptionIdSelector = createSelector(
+	realTimeSelector,
+	realtime => realtime.rooms.sid
+);
