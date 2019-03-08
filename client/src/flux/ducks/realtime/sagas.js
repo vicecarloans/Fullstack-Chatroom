@@ -7,8 +7,8 @@ import {
 	fork,
 	race,
 	cancelled,
+	delay,
 } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
 import {
 	START_CHANNEL,
 	turnServerOff,
@@ -21,7 +21,6 @@ import {
 	addErrorMessage,
 	addMessageToGroupChat,
 	listRooms,
-	LIST_ALL_ROOMS,
 	REQUEST_JOIN_ROOM,
 	REQUEST_LEAVE_ROOM,
 	REQUEST_ADD_MESSAGE_TO_GROUP,
@@ -42,7 +41,6 @@ import {
 	joinRoomSocket,
 	leaveRoomSocket,
 	switchRoomSocket,
-	subscribeListRoomSocket,
 } from 'utils/socket';
 
 const socket = io(SERVER_HOST);

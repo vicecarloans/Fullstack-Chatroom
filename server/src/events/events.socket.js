@@ -1,15 +1,11 @@
-const mongoose = require('mongoose');
 const socketConstants = require('../constants/socket');
 const socketExceptions = require('../exceptions/socket');
 const userUtils = require('../helpers/users');
 
-const EventsModel = mongoose.model('events');
-
 /* Writes into database on connection event */
-async function connection(socket) {
+async function connection({ socket }) {
 	try {
-		await EventsModel.save({ kind: socketConstants.CONNECT, socket });
-		console.log(`${event} was saved`);
+		await userUtils.saveEvent({ kind: 'connection', socket });
 	} catch (err) {
 		await socketExceptions.handleSocketException({ socket, err });
 	}
@@ -18,7 +14,7 @@ async function connection(socket) {
 function disconnect({ io, socket }) {
 	socket.on(socketConstants.DISCONNECT, async () => {
 		try {
-			await EventsModel.save({
+			await userUtils.saveEvent({
 				kind: socketConstants.DISCONNECT,
 				socket,
 				room: socket.room,
@@ -39,7 +35,7 @@ function changeUsername({ io, socket }) {
 			if (!username) {
 				throw new Error('You need to specify your username');
 			}
-			await EventsModel.save({
+			await userUtils.saveEvent({
 				kind: socketConstants.CHANGE_USERNAME,
 				socket,
 			});
@@ -66,7 +62,8 @@ function joinRoom({ io, socket }) {
 			socket.join(room);
 			socket.room = room;
 			// Save event model
-			await EventsModel.save({
+
+			await userUtils.saveEvent({
 				kind: socketConstants.JOIN,
 				socket,
 				room,
@@ -107,7 +104,7 @@ function leaveRoom({ io, socket }) {
 				rooms: io.sockets.adapter.rooms,
 			});
 			// Save event to event model
-			await EventsModel.save({
+			await userUtils.saveEvent({
 				kind: socketConstants.LEAVE,
 				socket,
 				room,
@@ -132,7 +129,7 @@ function switchRoom({ io, socket }) {
 				message: `${username} has left the room`,
 			});
 
-			await EventsModel.save({
+			await userUtils.saveEvent({
 				kind: socketConstants.LEAVE,
 				socket,
 				oldRoom,
@@ -145,7 +142,7 @@ function switchRoom({ io, socket }) {
 			socket.broadcast.to(newRoom).emit(socketConstants.NOTICE, {
 				message: `${username} has join the room`,
 			});
-			await EventsModel.save({
+			await userUtils.save({
 				kind: socketConstants.JOIN,
 				socket,
 				newRoom,

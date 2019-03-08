@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+const EventsModel = mongoose.model('events');
 const Promise = require('bluebird');
 
 function getAllUserByRoom({ io, room }) {
@@ -10,6 +12,21 @@ function getAllUserByRoom({ io, room }) {
 	});
 }
 
+async function saveEvent({ kind, socket, room }) {
+	try {
+		const event = new EventsModel({
+			kind,
+			uid: socket.id,
+			ppid: process.ppid,
+			room,
+		});
+		await event.save();
+	} catch (err) {
+		throw err;
+	}
+}
+
 module.exports = {
 	getAllUserByRoom,
+	saveEvent,
 };

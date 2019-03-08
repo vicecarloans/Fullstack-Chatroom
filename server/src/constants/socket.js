@@ -9,7 +9,7 @@ module.exports = {
 	// Leave Room
 	LEAVE: 'leave',
 	// This event is sent to user if there's an error occur
-	ERROR: 'error',
+	CUSTOM_ERROR: 'custom_error',
 	// This event is used to send message to group chat
 	ADD_MESSAGE: 'add_message',
 	// This event is received message from chat

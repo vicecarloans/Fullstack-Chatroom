@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('./src/events/events.model');
 require('./src/history/history.model');
-const util = require('util');
+const socketEvents = require('./src/constants/socket');
 
 // config should be imported before importing any other file
 const config = require('./config/config');
@@ -22,12 +22,19 @@ mongoose.connection.on('error', () => {
 
 if (!module.parent) {
 	// listen on port config.port
-	const io = app.listen(config.port, () => {
+	const server = app.listen(config.port, () => {
 		console.info(`server started on port ${config.port} (${config.env})`);
 	});
 	const socket = require('./socket');
-
-	io.on('connection', async _socket => await socket(io, _socket));
+	const io = require('socket.io')(server);
+	io.on('connection', async _socket => {
+		try {
+			await socket(io, _socket);
+		} catch (err) {
+			console.log(err);
+			_socket.emit(socketEvents.CUSTOM_ERROR, { err });
+		}
+	});
 }
 
 module.exports = app;

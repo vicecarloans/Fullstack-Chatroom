@@ -42,15 +42,6 @@ EventSchema.statics = {
 			.skip(+skip)
 			.limit(+limit);
 	},
-	save({ kind, room, socket }) {
-		const event = new EventSchema({
-			kind,
-			uid: socket.id,
-			ppid: process.ppid,
-			room,
-		});
-		return event.save();
-	},
 };
 
 mongoose.model('events', EventSchema);

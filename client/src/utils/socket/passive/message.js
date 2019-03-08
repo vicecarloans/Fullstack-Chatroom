@@ -41,11 +41,11 @@ export const createSocketInMessage = socket =>
 
 export const createSocketError = socket =>
 	eventChannel(emit => {
-		socket.on(customSocketEvents.ERROR, ({ message }) => {
+		socket.on(customSocketEvents.CUSTOM_ERROR, ({ message }) => {
 			emit(message);
 		});
 		return () => {
-			socket.off(customSocketEvents.ERROR, ({ message }) => {
+			socket.off(customSocketEvents.CUSTOM_ERROR, ({ message }) => {
 				emit(message);
 			});
 		};

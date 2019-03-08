@@ -6,7 +6,7 @@ export const customSocketEvents = {
 	// Leave Room
 	LEAVE: 'leave', //done
 	// This event is sent to user if there's an error occur
-	ERROR: 'error', //done
+	CUSTOM_ERROR: 'custom_error',
 	// This event is used to send message to group chat
 	ADD_MESSAGE: 'add_message', //done
 	// This event is received message from chat

@@ -30,14 +30,12 @@ function chatListener({ io, socket }) {
 			await MessageHistoryInstance.save();
 
 			// Events
-			const EventsInstance = new EventsModel({
+			await userUtils.saveEvent({
 				kind: socketConstants.ADD_MESSAGE,
 				uid: socket.id,
 				ppid: process.ppid,
 				room,
 			});
-
-			await EventsInstance.save();
 			// Broadcast to the receivers
 			io.to(room).emit(socketConstants.RECEIVE_MESSAGE, { message });
 		} catch (err) {
