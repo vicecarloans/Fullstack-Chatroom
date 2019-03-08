@@ -12,8 +12,13 @@ import {
 	REQUEST_SWITCH_ROOM,
 	REQUEST_LEAVE_ROOM,
 	ADD_ERROR_MESSAGE,
+	NEXT_STEP,
+	PREV_STEP,
+	CLOSE_REG_MODAL,
+	CLOSE_ROOM_MODAL
 } from './actions';
 import { ANNOUCEMENT, NORMAL, ERROR } from 'constants/messageTypes';
+import { stat } from 'fs';
 
 const statusInitState = {
 	server: 'unknown',
@@ -115,8 +120,37 @@ const rooms = (state = roomInitialState, { type, payload }) => {
 	}
 };
 
+const stepInitialState = {
+	step: 1,
+	openRegModal: true,
+	openRoomModal: false
+}
+const step = (state = stepInitialState, { type, payload }) => {
+	switch (type) {
+		case NEXT_STEP:
+			return {...state, 
+				step: state.step < 2 ? state.step + 1 : state.step, 
+				openRegModal: false, 
+				openRoomModal: true
+			};
+		case PREV_STEP:
+			return {...state, 
+				step: state.step > 1 ? state.step - 1 : state.step,
+				openRegModal: true, 
+				openRoomModal: false
+			};
+		case CLOSE_REG_MODAL:
+			return {...state, openRegModal: false}
+		case CLOSE_ROOM_MODAL:
+			return {...state, openRoomModal: false}
+		default:
+			return state;
+	}
+}
+
 export default combineReducers({
 	status,
 	messages,
 	rooms,
+	step
 });

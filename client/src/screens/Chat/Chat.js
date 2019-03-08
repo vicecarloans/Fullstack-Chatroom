@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import combineSelectors from 'utils/combineSelectors';
 import { startChannel } from 'flux/ducks/realtime';
 import { ChatBox } from 'components/Chat';
+import { Button } from 'carbon-components-react';
+import { ProgressModal } from '../../components/Chat';
 
 export class Chat extends Component {
 	static propTypes = {
@@ -15,7 +17,7 @@ export class Chat extends Component {
 	}
 
 	render() {
-		return <div>Chat</div>;
+		return <div></div>;
 	}
 }
 
