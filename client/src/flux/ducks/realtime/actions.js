@@ -132,3 +132,33 @@ export const changeUsername = username => ({
 		username,
 	},
 });
+
+export const NEXT_STEP = 'NEXT_STEP';
+
+export const nextStep = step => ({
+	type: NEXT_STEP,
+	payload: {
+		
+	}
+});
+
+export const PREV_STEP = 'PREV_STEP';
+
+export const prevStep = step => ({
+	type: PREV_STEP,
+	payload: {
+		
+	}
+});
+
+export const CLOSE_REG_MODAL = 'CLOSE_REG_MODAL';
+export const closeRegModal = () => ({
+	type: CLOSE_REG_MODAL,
+	payload: {}
+});
+
+export const CLOSE_ROOM_MODAL = 'CLOSE_ROOM_MODAL';
+export const closeRoomModal = () => ({
+	type: CLOSE_ROOM_MODAL,
+	payload: {}
+})
