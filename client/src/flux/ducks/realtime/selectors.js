@@ -52,3 +52,8 @@ export const roomsSelector = createSelector(
 	realTimeSelector,
 	realtime => realtime.rooms.list
 );
+
+export const stepSelector = createSelector(
+	realTimeSelector, 
+	realtime => realtime.step
+)
