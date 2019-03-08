@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import combineSelectors from 'utils/combineSelectors';
 import { startChannel } from 'flux/ducks/realtime';
+import { ChatBox } from 'components/Chat';
 
 export class Chat extends Component {
 	static propTypes = {

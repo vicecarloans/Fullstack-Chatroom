@@ -8,6 +8,7 @@ import {
 	race,
 	cancelled,
 	delay,
+	take,
 } from 'redux-saga/effects';
 import {
 	START_CHANNEL,
@@ -159,13 +160,12 @@ function* requestChangeUsernameSaga({ socket, username }) {
 	yield call(changeUserNameSocket, { socket, username });
 }
 
-function* racingSaga() {
-	yield race({
-		task: call(listenServerSaga),
-		cancel: takeLatest(STOP_CHANNEL),
-	});
-}
-
 export function* realtimeSagaWatcher() {
-	yield takeLatest(START_CHANNEL, racingSaga);
+	while (true) {
+		yield take(START_CHANNEL);
+		yield race({
+			task: call(listenServerSaga),
+			cancel: take(STOP_CHANNEL),
+		});
+	}
 }
