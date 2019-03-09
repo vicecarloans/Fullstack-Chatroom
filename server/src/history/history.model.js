@@ -7,7 +7,7 @@ const MessageHistorySchema = new Schema({
 		type: String,
 		default: 'Anonymous',
 	},
-	receiver: [
+	receivers: [
 		{
 			name: String,
 		},
@@ -38,8 +38,8 @@ MessageHistorySchema.statics = {
 	/*
 	 * Get all messages by rooms
 	 */
-	listByRoom({ room, skip = 0, limit = 50 } = {}) {
-		return this.find({ room })
+	listByRoom({ rooms, skip = 0, limit = 50 } = {}) {
+		return this.find({ room: { $in: rooms } })
 			.sort({ createdAt: -1 })
 			.skip(+skip)
 			.limit(+limit);

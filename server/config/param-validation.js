@@ -5,7 +5,7 @@ module.exports = {
 	// POST /api/history/room
 	listHistoryByRoom: {
 		body: {
-			room: Joi.number().required(),
+			rooms: Joi.array().required(),
 		},
 	},
 };

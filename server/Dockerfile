@@ -1,0 +1,26 @@
+FROM node:10-alpine
+
+WORKDIR /usr/app
+
+ARG NODE_ENV
+ARG MONGO_HOST
+ARG JWT_SECRET
+ARG PORT
+
+COPY package*.json ./
+COPY yarn.lock ./
+
+RUN yarn install
+
+COPY . .
+
+ENV PORT $PORT
+ENV NODE_ENV $NODE_ENV
+ENV MONGO_HOST $MONGO_HOST
+ENV JWT_SECRET $JWT_SECRET
+
+
+
+EXPOSE $PORT
+
+CMD ["yarn", "start"]

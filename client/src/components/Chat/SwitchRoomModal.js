@@ -9,6 +9,7 @@ import {
 	anyRoomsSelector,
 	requestSwitchRoom,
 	requestUnsubscribeListRoom,
+	roomSelector,
 } from 'flux/ducks/realtime';
 
 import {
@@ -30,7 +31,9 @@ export class SwitchRoomModal extends Component {
 	};
 
 	enterRoom = ({ selectedItem }) => {
-		this.props.requestSwitchRoom(selectedItem);
+		if (selectedItem !== this.props.currentRoom) {
+			this.props.requestSwitchRoom(selectedItem);
+		}
 		this.props.toggleSwitchRoomModalOff();
 		this.props.requestUnsubscribeListRoom();
 	};
@@ -75,6 +78,7 @@ export class SwitchRoomModal extends Component {
 }
 
 const mapStateToProps = combineSelectors({
+	currentRoom: roomSelector,
 	open: switchRoomModalSelector,
 	rooms: roomsSelector,
 	anyRooms: anyRoomsSelector,

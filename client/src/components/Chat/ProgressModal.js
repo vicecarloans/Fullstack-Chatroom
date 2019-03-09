@@ -128,7 +128,10 @@ export class ProgressModal extends Component {
 					onRequestSubmit={this.handleSubmitRoom}
 					onSecondarySubmit={this.handlePrevStep}
 				>
-					<ProgressIndicator currentIndex={this.props.step.step}>
+					<ProgressIndicator
+						className="indicator"
+						currentIndex={this.props.step.step}
+					>
 						<ProgressStep
 							label="Enter Username"
 							description="Step 1: Getting started with Carbon Design System"
@@ -149,6 +152,7 @@ export class ProgressModal extends Component {
 							onChange={this.enterRoom}
 							label="Room Lists"
 							ariaLabel="Choose your room list"
+							className="room-list"
 							items={this.props.rooms}
 						/>
 					) : (
@@ -157,9 +161,9 @@ export class ProgressModal extends Component {
 					<TextInput
 						type="text"
 						placeholder="Enter Room Name"
-						labelText="Room Name"
 						onChange={this.handleNewRoomName}
 						id="room"
+						className="create-room"
 					/>
 				</Modal>
 			</div>

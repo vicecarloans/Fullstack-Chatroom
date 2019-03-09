@@ -20,10 +20,10 @@ async function list(req, res, next) {
  */
 
 async function listByRoom(req, res, next) {
-	const { room } = req.body;
+	const { rooms } = req.body;
 	const { skip = 0, limit = 50 } = req.query;
 	try {
-		const messages = await MessageModel.listByRoom({ room, skip, limit });
+		const messages = await MessageModel.listByRoom({ rooms, skip, limit });
 		res.json(messages);
 	} catch (err) {
 		next(err);
