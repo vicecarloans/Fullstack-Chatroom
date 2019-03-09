@@ -7,11 +7,9 @@ const MessageHistorySchema = new Schema({
 		type: String,
 		default: 'Anonymous',
 	},
-	receivers: [
-		{
-			name: String,
-		},
-	],
+	receivers: {
+		type: [String],
+	},
 	content: {
 		type: String,
 		required: true,
