@@ -1,6 +1,6 @@
 # Fullstack-Chatroom
 
-The project is deployed at [here](http://ec2-3-93-47-219.compute-1.amazonaws.com)
+The project is deployed at [here](http://chatroom.huydam.com/)
 The API docs can be found [here](https://documenter.getpostman.com/view/5025103/S11RJaJF)
 
 ## Authors
